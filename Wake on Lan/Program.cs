@@ -9,24 +9,31 @@ namespace Wake_on_Lan
     public class Program
     {
 
-        
-        static byte[] macaddrss;
+       
+        // Setting up variables   
+        static byte[] macaddrss = new byte[6];
+        public static byte[] packetdata = new byte[102];
 
-        static IPHostEntry serverentry = Dns.GetHostEntry("google.com");
+        // Getting the domain's IP and opening a socket
+        static IPHostEntry serverentry = Dns.GetHostEntry("www.google.com");
         static IPAddress ipaddress = serverentry.AddressList[0];
-        static IPEndPoint ep = new IPEndPoint(ipaddress, 10);
+        static IPEndPoint ep = new IPEndPoint(ipaddress, 7);
         static Socket sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
-        public static byte[] packetdata;
+        
 
 
         public static void Main() {
-            macaddrss[0] = 00;
-            macaddrss[1] = 26;
-            macaddrss[2] = 160;
-            macaddrss[3] = 93;
-            macaddrss[4] = 251;
-            macaddrss[5] = 213;
+            
+         // Enter here your mac address
+            macaddrss[0] = 0x00;
+            macaddrss[1] = 0x00;
+            macaddrss[2] = 0x00;
+            macaddrss[3] = 0x00;
+            macaddrss[4] = 0x00;
+            macaddrss[5] = 0x00;
+
+         // Makes the MagicPacket
             for (int i = 0; i < 6; i++)
             {
                 packetdata[i] = 0xFF;
@@ -39,6 +46,8 @@ namespace Wake_on_Lan
                     packetdata[i * 6 + j] = macaddrss[j];
                 }
             }
+         
+         // Sends the packet   
             sock.SendTo(packetdata, ep);
         }
     
